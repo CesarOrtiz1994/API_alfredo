@@ -1,19 +1,15 @@
-const db = require('../db');
+const pool = require('../db');
 
-//funcion para obtener todos los datos de los registros y devolverlos en json
 async function obtenerDatosRegistros() {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM records`;
-        db.all(query, [], (err, rows) => {
-            if (err) {
-                console.error('Error al obtener los datos de los registros:', err.message);
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
+    try {
+        const connection = await pool.getConnection(); // Obtener conexión del pool
+        const [rows] = await connection.query('SELECT * FROM records'); // Ejecutar consulta
+        connection.release(); // Liberar conexión al pool
+        return rows;
+    } catch (err) {
+        console.error('❌ Error al obtener los datos de los registros:', err.message);
+        throw err; // Propaga el error
+    }
 }
 
-
-module.exports = { obtenerDatosRegistros};
+module.exports = { obtenerDatosRegistros };

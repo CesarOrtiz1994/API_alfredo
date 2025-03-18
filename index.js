@@ -1,3 +1,12 @@
+console.log("Iniciando servidor...");
+
+if (process.env.RAILWAY_PUBLIC_DOMAIN !== undefined) {
+    console.log("⚠️ Servidor en modo de producción. No se cargarán datos de prueba.");
+} else {
+    console.log("⚠️ Servidor en modo de desarrollo. Se cargarán datos de prueba.");
+    require('dotenv').config();
+}
+
 const express = require('express');
 
 const app = express();
